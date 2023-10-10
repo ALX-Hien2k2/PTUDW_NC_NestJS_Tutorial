@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model actor {
+  actor_id    Int      @id @default(autoincrement()) @db.UnsignedSmallInt
+  first_name  String   @db.VarChar(45)
+  last_name   String   @db.VarChar(45)
+  last_update DateTime @default(now()) @db.Timestamp(0)
+
+  @@index([last_name], map: "idx_actor_last_name")
+}
+
+model address {
+  address_id  Int        @id @default(autoincrement()) @db.UnsignedSmallInt
+  address     String     @db.VarChar(50)
+  address2    String?    @db.VarChar(50)
+  district    String     @db.VarChar(20)
+  city_id     Int        @db.UnsignedSmallInt
+  postal_code String?    @db.VarChar(10)
+  phone       String     @db.VarChar(20)
+  last_update DateTime   @default(now()) @db.Timestamp(0)
+  city        city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, map: "fk_address_city")
+  customer    customer[]
+
+  @@index([city_id], map: "idx_fk_city_id")
+}
+
+model category {
+  category_id Int      @id @default(autoincrement()) @db.UnsignedTinyInt
+  name        String   @db.VarChar(25)
+  last_update DateTime @default(now()) @db.Timestamp(0)
+}
+
+model city {
+  city_id     Int       @id @default(autoincrement()) @db.UnsignedSmallInt
+  city        String    @db.VarChar(50)
+  country_id  Int       @db.UnsignedSmallInt
+  last_update DateTime  @default(now()) @db.Timestamp(0)
+  address     address[]
+  country     country   @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "fk_city_country")
+
+  @@index([country_id], map: "idx_fk_country_id")
+}
+
+model country {
+  country_id  Int      @id @default(autoincrement()) @db.UnsignedSmallInt
+  country     String   @db.VarChar(50)
+  last_update DateTime @default(now()) @db.Timestamp(0)
+  city        city[]
+}
+
+model customer {
+  customer_id Int      @id @default(autoincrement()) @db.UnsignedSmallInt
+  store_id    Int      @db.UnsignedTinyInt
+  first_name  String   @db.VarChar(45)
+  last_name   String   @db.VarChar(45)
+  email       String?  @db.VarChar(50)
+  address_id  Int      @db.UnsignedSmallInt
+  active      Boolean  @default(true)
+  create_date DateTime @db.DateTime(0)
+  last_update DateTime @default(now()) @db.Timestamp(0)
+  address     address  @relation(fields: [address_id], references: [address_id], onDelete: NoAction, map: "fk_customer_address")
+
+  @@index([address_id], map: "idx_fk_address_id")
+  @@index([store_id], map: "idx_fk_store_id")
+  @@index([last_name], map: "idx_last_name")
+}
+
+model film {
+  film_id              Int          @id @default(autoincrement()) @db.UnsignedSmallInt
+  title                String       @db.VarChar(255)
+  description          String?      @db.Text
+  release_year         Int?         @db.Year
+  language_id          Int          @db.UnsignedTinyInt
+  original_language_id Int?         @db.UnsignedTinyInt
+  rental_duration      Int          @default(3) @db.UnsignedTinyInt
+  rental_rate          Decimal      @default(4.99) @db.Decimal(4, 2)
+  length               Int?         @db.UnsignedSmallInt
+  replacement_cost     Decimal      @default(19.99) @db.Decimal(5, 2)
+  rating               film_rating? @default(G)
+  special_features     String?
+  last_update          DateTime     @default(now()) @db.Timestamp(0)
+
+  @@index([language_id], map: "idx_fk_language_id")
+  @@index([original_language_id], map: "idx_fk_original_language_id")
+  @@index([title], map: "idx_title")
+}
+
+enum film_rating {
+  G
+  PG
+  PG_13 @map("PG-13")
+  R
+  NC_17 @map("NC-17")
+}

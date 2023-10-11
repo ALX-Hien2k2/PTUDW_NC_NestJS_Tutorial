@@ -16,11 +16,13 @@ export class ActorController {
   constructor(private actorService: ActorService) {}
 
   @Get()
+  // @HttpCode(HttpStatus.OK)
   async getActorList() {
     return await this.actorService.getActorList();
   }
 
   @Get(':id')
+  // @HttpCode(HttpStatus.OK)
   async getActor(@Param('id', ParseIntPipe) id: number) {
     return await this.actorService.getActor(id);
   }

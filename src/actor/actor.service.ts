@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddActorDto, EditActorDto } from './dto';
 
@@ -13,9 +17,7 @@ export class ActorService {
 
       // Check if the list is empty
       if (actorList.length === 0) {
-        return {
-          message: 'List is empty!',
-        };
+        throw new NotFoundException('No actors found!');
       }
 
       return actorList;
@@ -35,9 +37,7 @@ export class ActorService {
 
       // Check if actor is found
       if (!actor) {
-        return {
-          message: 'Actor not found!',
-        };
+        throw new NotFoundException('Actor not found!');
       }
 
       return actor;
@@ -56,14 +56,13 @@ export class ActorService {
       });
 
       if (!newActor) {
-        return {
-          message: 'Failed to add new actor!',
-        };
+        console.log('Failed to add new Actor!');
+        throw new ForbiddenException('Failed to add new Actor!');
       }
 
       return newActor;
     } catch (err) {
-      throw err;
+      throw new ForbiddenException('Something wrong!');
     }
   }
 
@@ -78,9 +77,7 @@ export class ActorService {
 
       // If actor is not found, return not found message
       if (!actor) {
-        return {
-          message: 'Actor not found!',
-        };
+        throw new NotFoundException('Actor not found!');
       }
 
       // If found, update actor
@@ -117,9 +114,7 @@ export class ActorService {
 
       // If actor is not found, return not found message
       if (!actor) {
-        return {
-          message: 'Actor not found!',
-        };
+        throw new NotFoundException('Actor not found!');
       }
 
       // If found, delete actor

@@ -11,7 +11,7 @@ import {
 import { ActorService } from './actor.service';
 import { AddActorDto, EditActorDto } from './dto';
 
-@Controller('actor')
+@Controller('actors')
 export class ActorController {
   constructor(private actorService: ActorService) {}
 

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ActorModule } from './actor/actor.module';
+import { FilmModule } from './film/film.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 
@@ -9,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
     }),
     ActorModule,
+    FilmModule,
     PrismaModule,
   ],
 })

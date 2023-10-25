@@ -7,8 +7,6 @@ services:
     # Config usage of resources
     mem_limit: '1g'
     mem_reservation: '512m'
-    cpus: '1'
-    cpuset: '2'
 
     environment:
       MYSQL_ROOT_PASSWORD: 123456

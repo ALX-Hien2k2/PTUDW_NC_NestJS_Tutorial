@@ -50,8 +50,8 @@ export class ActorService {
     try {
       const newActor = await this.prisma.actor.create({
         data: {
-          first_name: dto.first_name,
-          last_name: dto.last_name,
+          first_name: dto.firstName,
+          last_name: dto.lastName,
         },
       });
 
@@ -86,8 +86,8 @@ export class ActorService {
           actor_id: id,
         },
         data: {
-          first_name: dto.first_name,
-          last_name: dto.last_name,
+          first_name: dto.firstName,
+          last_name: dto.lastName,
         },
       });
 

@@ -1,6 +1,16 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { FilmService } from './film.service';
-import { GetFilmDto } from './dto/get_film.dto';
+import { AddFilmDto, GetFilmDto, UpdateFilmDto } from './dto';
 
 @Controller('films')
 export class FilmController {
@@ -14,5 +24,23 @@ export class FilmController {
   @Get(':id')
   getFilmById(@Param('id', ParseIntPipe) id: number) {
     return this.filmService.getFilmById(id);
+  }
+
+  @Post()
+  createFilm(@Body() dto: AddFilmDto) {
+    return this.filmService.addFilm(dto);
+  }
+
+  @Patch(':id')
+  updateFilm(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateFilmDto,
+  ) {
+    return this.filmService.updateFilm(id, dto);
+  }
+
+  @Delete(':id')
+  deleteFilm(@Param('id', ParseIntPipe) id: number) {
+    return this.filmService.deleteFilm(id);
   }
 }

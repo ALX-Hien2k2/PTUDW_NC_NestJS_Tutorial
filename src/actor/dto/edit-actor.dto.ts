@@ -3,9 +3,9 @@ import { IsOptional, IsString } from 'class-validator';
 export class EditActorDto {
   @IsString()
   @IsOptional()
-  first_name?: string;
+  firstName?: string;
 
   @IsString()
   @IsOptional()
-  last_name?: string;
+  lastName?: string;
 }

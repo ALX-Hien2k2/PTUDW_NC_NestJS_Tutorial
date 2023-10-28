@@ -45,6 +45,10 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## API documentation
+
+[Link](https://documenter.getpostman.com/view/16088057/2s9YR9Xs28)
+
 ## Test
 
 ```bash

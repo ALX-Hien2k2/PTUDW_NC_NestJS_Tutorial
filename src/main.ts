@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import { transports, format } from 'winston';
 import 'winston-daily-rotate-file';
+import 'winston-mongodb';
 import { Loggly } from 'winston-loggly-bulk';
 
 async function bootstrap() {
@@ -14,7 +15,7 @@ async function bootstrap() {
           filename: `logs/%DATE%.log`,
           format: format.combine(format.timestamp(), format.json()),
           datePattern: 'YYYY-MM-DD',
-          maxSize: 100000,
+          maxSize: 100000, // 100KB
         }),
         new transports.Console({
           format: format.combine(
@@ -24,6 +25,18 @@ async function bootstrap() {
             format.printf((info) => {
               return `${info.timestamp} ${info.level}:${info.message}`;
             }),
+          ),
+        }),
+        new transports.MongoDB({
+          db: process.env.MONGODB,
+          collection: 'logs',
+          options: {
+            useUnifiedTopology: true,
+          },
+          format: format.combine(
+            format.timestamp(),
+            format.json(),
+            format.metadata(),
           ),
         }),
         new Loggly({

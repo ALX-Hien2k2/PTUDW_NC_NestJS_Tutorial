@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { SignInDto, SignUpDto } from './dto';
+import { JwtPayloadDto, SignInDto, SignUpDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
@@ -49,9 +49,14 @@ export class AuthService {
       // Generate access token
       const accessToken = await this.genAccessToken(user.user_id, user.email);
 
+      delete user.password;
+
+      const refreshToken = await this.genRefreshToken(user.user_id, user.email);
+
       return {
         user,
         accessToken,
+        refreshToken,
       };
 
       // Return user's info
@@ -66,7 +71,7 @@ export class AuthService {
   }
 
   async signIn(dto: SignInDto) {
-    const { email } = dto;
+    const { email, password } = dto;
     try {
       const user = await this.prismaService.user.findUnique({
         where: {
@@ -78,20 +83,74 @@ export class AuthService {
         throw new ForbiddenException('User not found');
       }
 
+      if (!(await argon.verify(user.password, password))) {
+        throw new ForbiddenException('Wrong password');
+      }
+
       // Generate access token
       const accessToken = await this.genAccessToken(user.user_id, user.email);
 
+      const refreshToken = await this.genRefreshToken(user.user_id, user.email);
+
+      await this.prismaService.user.update({
+        where: {
+          user_id: user.user_id,
+        },
+        data: {
+          refresh_token: refreshToken,
+        },
+      });
+
       return {
-        user,
         accessToken,
+        refreshToken,
       };
     } catch (e) {
       throw e;
     }
   }
 
+  async refresh(id: number, refreshToken: string) {
+    try {
+      const user = await this.prismaService.user.findFirst({
+        where: {
+          user_id: id,
+        },
+      });
+
+      if (!user) {
+        throw new ForbiddenException('User not found');
+      }
+
+      if (refreshToken !== user.refresh_token) {
+        throw new ForbiddenException('Invalid token');
+      }
+
+      const accessToken = await this.genAccessToken(user.user_id, user.email);
+
+      return { accessToken };
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async logout(id: number) {
+    try {
+      await this.prismaService.user.update({
+        where: {
+          user_id: id,
+        },
+        data: {
+          refresh_token: null,
+        },
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
+
   async genAccessToken(userId: number, email: string): Promise<string> {
-    const payload = {
+    const payload: JwtPayloadDto = {
       sub: userId,
       email,
     };
@@ -99,6 +158,20 @@ export class AuthService {
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_AT_SECRET'),
       expiresIn: '5m',
+    });
+
+    return accessToken;
+  }
+
+  async genRefreshToken(userId: number, email: string): Promise<string> {
+    const payload: JwtPayloadDto = {
+      sub: userId,
+      email,
+    };
+
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get('JWT_RT_SECRET'),
+      expiresIn: '1d',
     });
 
     return accessToken;

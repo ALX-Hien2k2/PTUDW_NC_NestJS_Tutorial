@@ -6,22 +6,23 @@ import { JwtPayloadDto } from '../dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class JwtRefreshStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh',
+) {
   constructor(
     config: ConfigService,
     private readonly prisma: PrismaService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
       // ignoreExpiration: true,
-      secretOrKey: config.get('JWT_AT_SECRET'),
+      secretOrKey: config.get('JWT_RT_SECRET'),
     });
   }
 
   async validate(payload: JwtPayloadDto) {
     const { sub } = payload;
-
-    console.log(payload);
 
     try {
       // Check if user exists

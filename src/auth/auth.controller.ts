@@ -34,6 +34,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('sign-out')
   async signOut(@Req() req) {
     return await this.authService.logout(req.user.sub);

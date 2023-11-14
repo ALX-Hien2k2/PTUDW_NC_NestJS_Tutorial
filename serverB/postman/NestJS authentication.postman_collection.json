@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "ccbfcfca-d198-48c6-980c-ce1a142bfb8a",
+		"name": "NestJS authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24188163"
+	},
+	"item": [
+		{
+			"name": "Sign In",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"chihien2002@gmail.com\",\n    \"password\": \"123456789\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/auth/sign-in"
+			},
+			"response": []
+		},
+		{
+			"name": "Sign Up",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Hien\",\n    \"lastName\": \"Truong\",\n    \"email\": \"chihien2002@gmail.com\",\n    \"password\": \"123456789\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/auth/sign-up"
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiY2hpaGllbjIwMDJAZ21haWwuY29tIiwiaWF0IjoxNjk5NDkyNzIzLCJleHAiOjE2OTk1NzkxMjN9._rzspvy1asJjhIfX-NMfOYccTLTwTaahZuJcWHebD68\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/auth/refresh"
+			},
+			"response": []
+		},
+		{
+			"name": "Sign out",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiY2hpaGllbjIwMDJAZ21haWwuY29tIiwiaWF0IjoxNjk5NDkyNjA4LCJleHAiOjE2OTk0OTI5MDh9.DKpvE4KFEVfIk-DB2AXDZhJJ_GoEz6RoWZlPa3Wl9_U"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:3000/auth/sign-out"
+			},
+			"response": []
+		},
+		{
+			"name": "Get list of actors",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiY2hpaGllbjIwMDJAZ21haWwuY29tIiwiaWF0IjoxNjk5NDkyNzM1LCJleHAiOjE2OTk0OTMwMzV9.ANrCq1fazK_s2QwMKZAp7oId6BpC338okMemAoQ2OgE"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:3000/actors"
+			},
+			"response": []
+		}
+	]
+}

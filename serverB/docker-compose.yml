@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  mysql_db:
+    image: mysql:latest
+
+    # Config usage of resources
+    mem_limit: '1g'
+    mem_reservation: '512m'
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - '3307:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql_data:

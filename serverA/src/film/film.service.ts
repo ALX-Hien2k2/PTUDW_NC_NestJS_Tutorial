@@ -24,27 +24,6 @@ export class FilmService implements OnModuleInit {
       baseURL: cfs.get<string>('SERVERB_BASE_URL'),
     });
 
-    this.client.interceptors.request.use(
-      async function (config) {
-        const now = Date.now();
-
-        const token = await argon.hash(
-          config.url + now + cfs.get<string>('SECRET'),
-        );
-
-        if (config.method === 'get') {
-          config.params = { ...config.params, token, time: now };
-        } else {
-          config.data = { ...config.params, token, time: now };
-        }
-
-        return config;
-      },
-      function (error) {
-        return Promise.reject(error);
-      },
-    );
-
     this.client.interceptors.response.use(
       function (response) {
         return response.data;

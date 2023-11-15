@@ -11,9 +11,7 @@ import {
 } from '@nestjs/common';
 import { ActorService } from './actor.service';
 import { AddActorDto, EditActorDto } from './dto';
-import { JwtGuard } from 'src/auth/guard';
 
-@UseGuards(JwtGuard)
 @Controller('actors')
 export class ActorController {
   constructor(private actorService: ActorService) {}

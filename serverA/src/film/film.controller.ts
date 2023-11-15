@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { FilmService } from './film.service';
 import { AddFilmDto, GetFilmDto, UpdateFilmDto } from './dto';
-import { JwtGuard } from 'src/auth/guard';
 
 @Controller('films')
 export class FilmController {

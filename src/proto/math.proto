@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package math;
+
+service MathService{
+    rpc Sum2Int (Sum2IntReq) returns (Sum2IntRes) {}
+}
+
+message Sum2IntReq {
+    int32 a = 1;
+    int32 b = 2;
+}
+
+message Sum2IntRes {
+    int32 sum = 1;
+}
+
+

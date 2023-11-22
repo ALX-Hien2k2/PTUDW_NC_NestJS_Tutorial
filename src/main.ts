@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 // import { transports, format } from 'winston';
 import 'winston-daily-rotate-file';
 import 'winston-mongodb';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { MATH_PACKAGE_NAME } from './proto/math.pb';
 // import { Loggly } from 'winston-loggly-bulk';
 
 async function bootstrap() {
@@ -54,8 +56,20 @@ async function bootstrap() {
     }),
   ); // If whitelist = true, then it will remove any properties that are not in the DTO
   const port = 3000;
-  await app.listen(port);
+  const grpcUrl = '0.0.0.0:9000';
+
+  await app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: MATH_PACKAGE_NAME,
+      protoPath: 'src/proto/math.proto',
+      url: grpcUrl,
+    },
+  });
+
   console.log(`Server is running on port ${port}`);
+  await app.listen(port);
+  await app.startAllMicroservices();
 }
 
 bootstrap();

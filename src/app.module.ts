@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 // import { APP_INTERCEPTOR } from '@nestjs/core';
 // import { LoggingInterceptor } from './logging/logging.interceptor';
 import { AuthModule } from './auth/auth.module';
+import { MathModule } from './math/math.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
     FilmModule,
     PrismaModule,
     AuthModule,
+    MathModule,
   ],
   providers: [
     // {

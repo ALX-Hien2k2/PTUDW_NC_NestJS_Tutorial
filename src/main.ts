@@ -53,7 +53,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   ); // If whitelist = true, then it will remove any properties that are not in the DTO
-  const port = 3000;
+  const port = 3001;
   await app.listen(port);
   console.log(`Server is running on port ${port}`);
 }

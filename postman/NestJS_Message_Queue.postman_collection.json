@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "24088998-b939-4763-9247-c0f8d9b7106a",
+		"name": "NestJS_Message_Queue",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24188163"
+	},
+	"item": [
+		{
+			"name": "Request/Reply",
+			"item": [
+				{
+					"name": "Send message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"Hello from client\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/send-message"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pub/sub",
+			"item": [
+				{
+					"name": "Publish message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": \"Hello from server 2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/publish-message"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RPC",
+			"item": [
+				{
+					"name": "Get sum",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"num_a\": 50,\n    \"num_b\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/get-sum"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
